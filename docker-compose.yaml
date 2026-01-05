@@ -1,0 +1,19 @@
+services:
+  valhalla:
+    image: ghcr.io/valhalla/valhalla:latest
+    container_name: valhalla
+    volumes:
+      - ./:/custom_files
+    ports:
+      - "8091:8002"
+    command: valhalla_service /custom_files/valhalla.json 1
+
+  valhalla-proxy:
+    image: caddy
+    container_name: valhalla-proxy
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - "8092:8092"
+    depends_on:
+      - valhalla
